@@ -22,6 +22,7 @@ class Game {
         //Functions
         void updatePlayer();
         void update();
+        void updateCollision();
 
         void renderPlayer();
         void render();

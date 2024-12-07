@@ -41,10 +41,23 @@ void Game::update() {
                 if(this->windowEvent.key.code == sf::Keyboard::Escape)
                     this->window.close();
                 break;
+            case sf::Event::KeyReleased:
+                if (this->windowEvent.key.code == sf::Keyboard::A || this->windowEvent.key.code == sf::Keyboard::D || this->windowEvent.key.code == sf::Keyboard::W)
+                    this->player->resetAnimationClock();
+                break;
         }
     }
 
     this->updatePlayer();
+    this->updateCollision();
+}
+
+void Game::updateCollision() {
+    // Collision at bottom of window 
+    if (this->player->getGlobalBounds().top + this->player->getGlobalBounds().height >= this->window.getSize().y) {
+        this->player->resetVelocityY();
+        this->player->setPosition(this->player->getGlobalBounds().left, this->window.getSize().y - this->player->getGlobalBounds().height);
+    }
 }
 
 void Game::render() {

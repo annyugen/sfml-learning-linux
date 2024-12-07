@@ -5,16 +5,30 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
+enum PLAYER_ANIMATION_STATES {IDLE = 0, MOVING_LEFT = 1, MOVING_RIGHT = 2, JUMPING = 3, FALLING = 4 };
+
 class Player {
     private:
         sf::Sprite sprite;
         sf::Texture texture;
-        bool moving;
+        sf::Sprite runningSprite;
+        sf::Texture runningTexture;
 
         // Animation
+        short animationState;
         sf::IntRect currentFrame;
         sf::Clock animationClock;
-        // Movement
+        bool animationSwitch;
+        
+        // Physics
+        sf::Vector2f velocity;
+        float maxVelocity;
+        float minVelocity;
+        float acceleration;
+        float deceleration;
+        float gravity;
+        float maxVelocityY;
+        
 
         // Core
 
@@ -23,15 +37,27 @@ class Player {
         void initTexture();
         void initSprite();
         void initAnimation();
+        void initPhysics();
 
     public:
         Player();
         virtual ~Player();
 
+        const bool& getAnimationSwitch();
+        const sf::FloatRect getGlobalBounds() const;
+
+        // Modifier for bounding
+        void setPosition(const float x, const float y);
+        void resetVelocityY();
+
+        // Animation functions
+        void updateMovement(const float xDirection, const float yDirection); 
+        void updatePhysics();
         void updateMovement();
         void updateAnimation();
+        void resetAnimationClock();
 
-        // Rendering Functions
+        // Rendering functions
         void update();
         void render(sf::RenderTarget& renderTarget);
 };
